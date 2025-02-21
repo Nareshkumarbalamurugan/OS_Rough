@@ -1,0 +1,137 @@
+Here's the equivalent C++ code for your requests, but without using std:: in every place, by removing the std:: prefix and using using namespace std; at the top.
+1. Process Creation using fork() in C++ (Without std::):
+
+#include <iostream>
+#include <unistd.h>
+
+using namespace std;
+
+int main() {
+    cout << "PID = " << getpid() << endl;
+    cout << "PPID = " << getppid() << endl;
+    return 0;
+}
+
+Output:
+
+PID = 15156
+PPID = 3412
+
+2. Demonstrate exec() System Call in C++ (Without std::):
+
+First File (sc1.cpp)
+
+#include <iostream>
+#include <unistd.h>
+#include <cstdlib>
+
+using namespace std;
+
+int main(int argc, char *argv[]) {
+    cout << "PID of sc2.cpp = " << getpid() << endl;
+
+    char *args[] = {"./sc3", "hello", "ai", NULL};
+    execv("./sc3", args);
+
+    perror("execv failed");
+    cout << "Back to sc2.cpp" << endl;
+
+    return 0;
+}
+
+Second File (sc3.cpp)
+
+#include <iostream>
+#include <unistd.h>
+
+using namespace std;
+
+int main(int argc, char *argv[]) {
+    cout << "We are in sc3.cpp" << endl;
+    cout << "PID of sc3.cpp = " << getpid() << endl;
+
+    return 0;
+}
+
+Expected Output:
+
+PID of sc2.cpp = 15187
+We are in sc3.cpp
+PID of sc3.cpp = 15187
+
+3. Process Creation using fork() with wait() in C++ (Without std::):
+
+#include <iostream>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <cstdlib>
+
+using namespace std;
+
+int main() {
+    pid_t q;
+    q = fork();
+
+    if (q < 0) {
+        cout << "Error" << endl;
+    } else if (q == 0) {
+        cout << "Child having id " << getpid() << endl;
+        cout << "My parent id is " << getppid() << endl;
+    } else {
+        wait(NULL);
+        cout << "After wait" << endl;
+        cout << "I am parent having id " << getpid() << endl;
+        cout << "My child id is " << q << endl;
+    }
+    cout << "Common" << endl;
+
+    return 0;
+}
+
+Expected Output:
+
+Child having id 15229
+My parent id is 15228
+Common
+After wait
+I am parent having id 15228
+My child id is 15229
+Common
+
+4. Process Creation using fork() in C++ (Without std::):
+
+#include <iostream>
+#include <unistd.h>
+
+using namespace std;
+
+int main() {
+    pid_t q;
+    q = fork();
+
+    if (q < 0) {
+        cout << "Error" << endl;
+    } else if (q == 0) {
+        cout << "Child having id " << getpid() << endl;
+        cout << "My parent id is " << getppid() << endl;
+    } else {
+        cout << "I am parent having id " << getpid() << endl;
+        cout << "My child id is " << q << endl;
+    }
+    cout << "Common" << endl;
+
+    return 0;
+}
+
+Expected Output:
+
+I am parent having id 15249
+My child id is 15250
+Common
+Child having id 15250
+My parent id is 15249
+Common
+
+This version of the code avoids the need to prefix std:: before the standard library functions by using the using namespace std; directive.
+
+Let me know if you'd like any further adjustments!
